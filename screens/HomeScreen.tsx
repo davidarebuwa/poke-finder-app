@@ -1,43 +1,60 @@
-// src/screens/HomeScreen.tsx
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, ActivityIndicator } from 'react-native';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Platform,
+} from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { fetchPokemonList, fetchPokemonDetails } from '../api/pokeapi';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { PokemonCard } from '../components/PokeCard';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export default function HomeScreen() {
-  const [pokemon, setPokemon] = useState<any[]>([]);
-  const [filtered, setFiltered] = useState<any[]>([]);
-  const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const navigation = useNavigation();
+export default function HomeScreen({ navigation }) {
+  const [pokemonList, setPokemonList] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [search, setSearch] = useState('');
+  const insets = useSafeAreaInsets();
 
-  const loadMore = async () => {
-    if (loading) return;
-    setLoading(true);
-    const data = await fetchPokemonList(20, offset);
-    const detailed = await Promise.all(data.results.map((p: any) => fetchPokemonDetails(p.url)));
-    setPokemon(prev => [...prev, ...detailed]);
-    setFiltered(prev => [...prev, ...detailed]);
-    setOffset(offset + 20);
-    setLoading(false);
-  };
 
   useEffect(() => {
-    loadMore();
+    fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
+      .then(res => res.json())
+      .then(async data => {
+        const pokemonWithDetails = await Promise.all(
+          data.results.map(async p => {
+            const details = await fetch(p.url).then(r => r.json());
+            return details;
+          })
+        );
+        setPokemonList(pokemonWithDetails);
+        setFiltered(pokemonWithDetails);
+      });
   }, []);
 
-  const handleSearch = (text: string) => {
-    if (!text) return setFiltered(pokemon);
-    setFiltered(pokemon.filter(p => p.name.toLowerCase().includes(text.toLowerCase())));
-  };
+  useEffect(() => {
+    const query = search.toLowerCase();
+    setFiltered(
+      pokemonList.filter(p => p.name.toLowerCase().includes(query))
+    );
+  }, [search]);
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      <TextInput placeholder="Search Pokémon" onChangeText={handleSearch} style={{ padding: 10, borderColor: '#ccc', borderWidth: 1, marginBottom: 10 }} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <View style={[styles.searchContainer, { paddingTop: insets.top + 44 }]}>
+      <TextInput
+          placeholder="Search Pokémon..."
+          value={search}
+          onChangeText={setSearch}
+          style={styles.input}
+          placeholderTextColor="#999"
+        />
+      </View>
+
       <FlashList
         data={filtered}
+        keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
           <PokemonCard
             name={item.name}
@@ -45,11 +62,31 @@ export default function HomeScreen() {
             onPress={() => navigation.navigate('Detail', { pokemon: item })}
           />
         )}
-        estimatedItemSize={100}
-        onEndReached={loadMore}
-        keyExtractor={item => item.name}
+        estimatedItemSize={160}
+        numColumns={2}
+        contentContainerStyle={styles.list}
+        columnWrapperStyle={{ justifyContent: 'space-between' }}
       />
-      {loading && <ActivityIndicator />}
-    </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  searchContainer: {
+    paddingHorizontal: 16,
+    paddingTop: Platform.OS === 'ios' ? 60 : 16, // space for large nav title
+    backgroundColor: '#fff',
+  },
+  input: {
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#f1f1f1',
+    paddingHorizontal: 12,
+    fontSize: 16,
+    marginBottom: 12,
+  },
+  list: {
+    paddingHorizontal: 12,
+    paddingBottom: 16,
+  },
+});

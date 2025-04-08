@@ -16,7 +16,21 @@ export const PokemonCard: React.FC<Props> = ({ name, image, onPress }) => (
 );
 
 const styles = StyleSheet.create({
-  card: { alignItems: 'center', margin: 10 },
-  image: { width: 80, height: 80 },
-  name: { marginTop: 5, fontWeight: 'bold' },
-});
+    card: {
+      flex: 1,
+      margin: 8,
+      padding: 12,
+      backgroundColor: '#fff',
+      borderRadius: 12,
+      alignItems: 'center',
+      // iOS Shadow
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+      // Android Elevation
+      elevation: 4,
+    },
+    image: { width: 80, height: 80, marginBottom: 8 },
+    name: { fontWeight: 'bold', fontSize: 16, textTransform: 'capitalize' },
+  });
