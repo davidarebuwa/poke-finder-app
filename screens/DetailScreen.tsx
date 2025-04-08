@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, Platform } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, Platform, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function DetailScreen({ route, navigation }) {
   const { pokemon } = route.params;
+
+  console.log('DetailScreen', pokemon);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -15,7 +17,10 @@ export default function DetailScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.container}>
+        {/* Image */}
         <Image source={{ uri: pokemon.sprites.front_default }} style={styles.image} />
+        
+        {/* Stats Section */}
         <View style={styles.card}>
           <Text style={styles.title}>Stats</Text>
           {pokemon.stats.map(stat => (
@@ -26,6 +31,53 @@ export default function DetailScreen({ route, navigation }) {
               </View>
               <Text style={styles.statValue}>{stat.base_stat}</Text>
             </View>
+          ))}
+        </View>
+
+        {/* Abilities Section */}
+        <View style={styles.card}>
+          <Text style={styles.title}>Abilities</Text>
+          {pokemon.abilities.map(ability => (
+            <Text key={ability.ability.name} style={styles.abilityText}>
+              {ability.ability.name}
+            </Text>
+          ))}
+        </View>
+
+        {/* Types Section */}
+        <View style={styles.card}>
+          <Text style={styles.title}>Types</Text>
+          {pokemon.types.map(type => (
+            <View key={type.type.name} style={[styles.typeBadge, { backgroundColor: getTypeColor(type.type.name) }]}>
+              <Text style={styles.typeText}>{type.type.name}</Text>
+            </View>
+          ))}
+        </View>
+
+        {/* Height and Weight Section */}
+        <View style={styles.card}>
+          <Text style={styles.title}>Physical Attributes</Text>
+          <Text style={styles.attribute}>Height: {pokemon.height / 10} m</Text>
+          <Text style={styles.attribute}>Weight: {pokemon.weight / 10} kg</Text>
+        </View>
+
+        {/* Evolution Section */}
+        {pokemon.evolution_chain && (
+          <View style={styles.card}>
+            <Text style={styles.title}>Evolution Chain</Text>
+            <TouchableOpacity style={styles.evolutionLink}>
+              <Text style={styles.evolutionText}>See Evolution</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* Moves Section */}
+        <View style={styles.card}>
+          <Text style={styles.title}>Moves</Text>
+          {pokemon.moves.slice(0, 10).map(move => (
+            <Text key={move.move.name} style={styles.moveText}>
+              {move.move.name}
+            </Text>
           ))}
         </View>
       </ScrollView>
@@ -50,6 +102,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 5,
+    marginBottom: 20,
   },
   title: { fontSize: 20, fontWeight: 'bold', marginBottom: 10 },
   statRow: {
@@ -71,4 +124,46 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   statValue: { width: 30, textAlign: 'right' },
+  abilityText: { fontSize: 16, marginBottom: 5 },
+  typeBadge: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    marginVertical: 4,
+  },
+  typeText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  attribute: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  evolutionLink: {
+    padding: 10,
+    backgroundColor: '#007bff',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  evolutionText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  moveText: {
+    fontSize: 16,
+    marginVertical: 2,
+  },
 });
+
+// Utility function to get color based on type
+const getTypeColor = (type) => {
+  const typeColors = {
+    fire: '#F28D00',
+    water: '#00A9E0',
+    grass: '#6E9C00',
+    electric: '#F4E300',
+    psychic: '#F24E00',
+    // Add more types here
+  };
+  return typeColors[type] || '#888'; // Default color
+};

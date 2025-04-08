@@ -22,7 +22,7 @@ export default function Navigation() {
           contentStyle: { backgroundColor: '#fff' },
           headerTransparent: Platform.OS === 'ios',
           }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="PokeFinder" component={HomeScreen} />
         <Stack.Screen name="Detail" component={DetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>

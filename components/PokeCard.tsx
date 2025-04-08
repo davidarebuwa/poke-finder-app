@@ -10,7 +10,7 @@ interface Props {
 
 export const PokemonCard: React.FC<Props> = ({ name, image, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.card}>
-    <Image source={{ uri: image }} style={styles.image} />
+    <Image source={{ uri: image }} style={styles.image}  testID="pokemon-image"/>
     <Text style={styles.name}>{name}</Text>
   </TouchableOpacity>
 );

@@ -47,6 +47,13 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<key>UIAppFonts</key>
+<array>
+  <string>./node_modules/react-native-vector-icons/Fonts/Ionicons.ttf</string>
+  <string>./node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf</string>
+  <string>./node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf</string>
+  <!-- Add other icon font files if necessary -->
+</array>
 	<false/>
 </dict>
 </plist>
