@@ -38,8 +38,7 @@ A beautiful, responsive Pokédex mobile app built with **React Native**, powered
 ### Installation
 
 ```bash
-git clone <your-repo-url>
+git clone <repo-url>
 cd pokedex-app
-npm install
-# or
-yarn
+npx react-native start
+
