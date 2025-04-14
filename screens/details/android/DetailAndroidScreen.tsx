@@ -3,7 +3,7 @@ import { View, Text, Image, ScrollView, SafeAreaView, Platform } from 'react-nat
 import  getTypeColor  from '../../../utils/getTypeColor';
 import styles from '../ios/styles';
 
-export default function DetailScreen({ route, navigation }) {
+export default function AndroidDetailScreen({ route, navigation }) {
   const { pokemon } = route.params || {};
 
   React.useLayoutEffect(() => {
