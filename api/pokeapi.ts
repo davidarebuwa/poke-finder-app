@@ -2,12 +2,24 @@ import axios from 'axios';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
 
-export const fetchPokemonList = async (limit = 20, offset = 0) => {
-  const res = await axios.get(`${BASE_URL}/pokemon?limit=${limit}&offset=${offset}`);
-  return res.data;
-};
+export async function fetchPokemonList(url) {
+  const response = await fetch(url);
+  const data = await response.json();
 
-export const fetchPokemonDetails = async (url: string) => {
-  const res = await axios.get(url);
-  return res.data;
-};
+  const detailed = await Promise.all(
+    data.results.map(async (item) => {
+      try {
+        const res = await fetch(item.url);
+        return await res.json();
+      } catch {
+        return null;
+      }
+    })
+  );
+
+  return {
+    pokemon: detailed.filter((p) => p && p.name),
+    next: data.next,
+  };
+}
+
