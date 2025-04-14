@@ -5,8 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function DetailScreen({ route, navigation }) {
   const { pokemon } = route.params;
 
-  console.log('DetailScreen', pokemon);
-
   React.useLayoutEffect(() => {
     navigation.setOptions({
       title: pokemon.name.toUpperCase(),
