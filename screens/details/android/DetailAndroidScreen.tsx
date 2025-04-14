@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, SafeAreaView, Platform } from 'react-native';
+import { View, Text, Image, ScrollView, SafeAreaView, Platform } from 'react-native';
+import  getTypeColor  from '../../../utils/getTypeColor';
+import styles from '../ios/styles';
 
 export default function DetailScreen({ route, navigation }) {
   const { pokemon } = route.params || {};
@@ -62,56 +64,4 @@ export default function DetailScreen({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#fff' },
-  container: { alignItems: 'center', padding: 20 },
-  name: { fontSize: 24, fontWeight: 'bold', marginBottom: 10 },
-  image: { width: 150, height: 150, marginBottom: 20 },
 
-  card: {
-    width: '100%',
-    backgroundColor: '#f9f9f9',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    elevation: 2,
-  },
-  title: { fontSize: 18, fontWeight: '600', marginBottom: 8 },
-
-  row: { flexDirection: 'row', flexWrap: 'wrap' },
-
-  typeBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  typeText: { color: '#fff', fontWeight: 'bold' },
-
-  statRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 4,
-  },
-  statLabel: { textTransform: 'capitalize' },
-  statValue: { fontWeight: 'bold' },
-});
-
-// Utility: get background color for each type
-const getTypeColor = (type) => {
-  const colors = {
-    fire: '#f08030',
-    water: '#6890f0',
-    grass: '#78c850',
-    electric: '#f8d030',
-    psychic: '#f85888',
-    ice: '#98d8d8',
-    dragon: '#7038f8',
-    dark: '#705848',
-    fairy: '#ee99ac',
-    normal: '#a8a878',
-    // Add more as needed
-  };
-  return colors[type] || '#ccc';
-};

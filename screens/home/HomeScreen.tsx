@@ -2,15 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   TextInput,
-  StyleSheet,
-  Text,
   ActivityIndicator,
   Platform,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PokemonCard } from '../components/PokeCard';
-import { fetchPokemonList } from '../api/pokeapi';
+import { PokemonCard } from '../../components/PokeCard';
+import { fetchPokemonList } from '../../api/pokeapi';
+import styles from './styles';
 
 export default function HomeScreen({ navigation }) {
   const [pokemonList, setPokemonList] = useState([]);
@@ -95,27 +94,3 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  searchContainer: {
-    paddingHorizontal: 16,
-    backgroundColor: '#fff',
-    paddingVertical: 10,
-    paddingTop: Platform.OS === 'ios' ? 60 : 16,
-  },
-  input: {
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: '#f1f1f1',
-    paddingHorizontal: 12,
-    fontSize: 16,
-  },
-  list: {
-    paddingHorizontal: 12,
-    paddingBottom: 16,
-    backgroundColor: '#fff',
-  },
-  loader: {
-    paddingVertical: 20,
-    alignItems: 'center',
-  },
-});
